@@ -1,0 +1,9 @@
+package com.mycompany.residencialsync.InterfacesJPA;
+
+import com.mycompany.residencialsync.Model.Visita;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface InterfaceJpaVisita extends JpaRepository<Visita, Long> {
+}
