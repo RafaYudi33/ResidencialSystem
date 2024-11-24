@@ -3,21 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.residencialsync.Model;
-
-import br.com.caelum.stella.boleto.*;
-import br.com.caelum.stella.boleto.bancos.BancoDoBrasil;
-import br.com.caelum.stella.boleto.bancos.Bradesco;
-import br.com.caelum.stella.boleto.transformer.GeradorDeBoleto;
 import jakarta.persistence.*;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.springframework.cglib.core.Local;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 /**
  *
@@ -76,76 +63,6 @@ public class BoletoCondominial {
         }
         setTaxaFinal(taxaFinalCalculada);
     }
-
-    public void gerarPDF(){
-
-        var dataAtual = LocalDateTime.now();
-        var diaAtual = LocalDateTime.now().getDayOfMonth();
-        var mesAtual = LocalDateTime.now().getMonthValue();
-        var anoAtual = LocalDateTime.now().getYear();
-
-        Datas datas = Datas.novasDatas()
-                .comDocumento(diaAtual, mesAtual, anoAtual)
-                .comProcessamento(diaAtual, mesAtual, anoAtual)
-                .comVencimento(
-                        this.dataVencimento.getDayOfMonth(),
-                        this.dataVencimento.getMonthValue(),
-                        this.dataVencimento.getYear()
-                );
-
-        Emissor emissor = Emissor.novoEmissor()
-                .comCedente(condominio.getNome())
-                .comAgencia(condominio.getAgencia())
-                .comDigitoAgencia(condominio.getDigitoAgencia())
-                .comContaCorrente(condominio.getContaCorrente())
-                .comNumeroConvenio(condominio.getNumeroConvenio())
-                .comDigitoContaCorrente(condominio.getDigitoContaCorrente())
-                .comCarteira(condominio.getNumeroCarteira())
-                .comNossoNumero(condominio.getNossoNumero());
-
-        var proprietario = getPropriedade().getProprietario();
-        var propriedade = getPropriedade();
-        Sacado sacado = Sacado.novoSacado()
-                .comNome(proprietario.getNome())
-                .comCpf(proprietario.getCpf())
-                .comEndereco(propriedade.getLogradouro())
-                .comBairro(propriedade.getBairro())
-                .comCep(propriedade.getCep())
-                .comCidade(propriedade.getCidade())
-                .comUf(propriedade.getUf());
-
-        Banco banco = new Bradesco();
-
-        Boleto boleto = Boleto.novoBoleto()
-                .comBanco(banco)
-                .comDatas(datas)
-                .comDescricoes("descricao 1")
-                .comEmissor(emissor)
-                .comSacado(sacado)
-                .comValorBoleto(this.taxaFinal)
-                .comNumeroDoDocumento("1234")
-                .comInstrucoes("Porcentagem Mensal Juros: "+Double.toString(percentagemMensalJuros))
-                .comLocaisDePagamento("local 1", "local 2")
-                .comNumeroDoDocumento("4343")
-                .comValorMulta(String.valueOf(this.valorMulta));
-
-        GeradorDeBoleto gerador = new GeradorDeBoleto(boleto);
-
-        byte[] bPDF = gerador.geraPDF();
-
-        Random rand = new Random();
-
-        String caminhoArquivo = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + propriedade.getLogradouro()+propriedade.getNumero()+"boleto.pdf";
-
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bPDF);
-             PDDocument document = PDDocument.load(byteArrayInputStream)) {
-             document.save(caminhoArquivo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
     public Long getId() {
         return id;

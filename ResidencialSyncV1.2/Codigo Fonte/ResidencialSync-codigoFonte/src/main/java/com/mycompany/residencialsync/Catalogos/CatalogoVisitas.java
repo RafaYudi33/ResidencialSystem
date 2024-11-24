@@ -7,12 +7,12 @@ package com.mycompany.residencialsync.Catalogos;
 import com.mycompany.residencialsync.InterfacesJPA.InterfaceJpaVisita;
 import com.mycompany.residencialsync.Model.UnidadeResidencial;
 import com.mycompany.residencialsync.Model.Visita;
+import com.mycompany.residencialsync.ServicosExternos.ServiceGeradorQrCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,14 +20,16 @@ import java.util.List;
  * @author rafay
  */
 
-@SuppressWarnings("ALL")
+
 @Component
 public class CatalogoVisitas {
     private List<Visita> visitas;
+    private final ServiceGeradorQrCode serviceGeradorQrCode;
     private final InterfaceJpaVisita interfaceJpaVisita;
 
     @Autowired
-    public CatalogoVisitas(InterfaceJpaVisita interfaceJpaVisita){
+    public CatalogoVisitas(ServiceGeradorQrCode serviceGeradorQrCode, InterfaceJpaVisita interfaceJpaVisita){
+        this.serviceGeradorQrCode = serviceGeradorQrCode;
         this.interfaceJpaVisita = interfaceJpaVisita;
         this.visitas = new ArrayList<>();
         carregarVisitas();
@@ -36,7 +38,7 @@ public class CatalogoVisitas {
     public String registrarVisita(String cpf, String placaCarro, LocalDateTime dataHora1, UnidadeResidencial unidade) {
         var visita = new Visita(dataHora1, placaCarro, cpf, unidade);
         visitas.add(visita);
-        return visita.gerarQrCode();
+        return this.serviceGeradorQrCode.gerarQrCode(visita);
     }
     
     public void carregarVisitas(){
@@ -50,7 +52,4 @@ public class CatalogoVisitas {
             }
         }
     }
-
-
-
 }

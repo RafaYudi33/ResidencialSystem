@@ -6,6 +6,7 @@ package com.mycompany.residencialsync.Catalogos;
 
 import com.mycompany.residencialsync.InterfacesJPA.InterfaceJpaPropriedades;
 import com.mycompany.residencialsync.Model.*;
+import com.mycompany.residencialsync.ServicosExternos.ServiceGeradorBoletos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,10 +24,12 @@ import java.util.List;
 @Component
 public class CatalogoPropriedades {
     private List<Propriedade> propriedades;
+    private final ServiceGeradorBoletos serviceGeradorBoletos;
     private final InterfaceJpaPropriedades interfaceJpaPropriedades;
 
     @Autowired
-    public CatalogoPropriedades(InterfaceJpaPropriedades interfaceJpaPropriedades){
+    public CatalogoPropriedades(ServiceGeradorBoletos serviceGeradorBoletos, InterfaceJpaPropriedades interfaceJpaPropriedades){
+        this.serviceGeradorBoletos = serviceGeradorBoletos;
         this.interfaceJpaPropriedades = interfaceJpaPropriedades;
         this.propriedades = new ArrayList<>();
         carregarPropriedades();
@@ -63,11 +66,10 @@ public class CatalogoPropriedades {
 
     public void gerarPdfBoletosTodasProps(double valorMulta, double porcentagemMensalJuros, LocalDateTime dataVencimento, double taxaBase, double contaAgua,Condominio condominio) {
         var qtd = obterQtdResidencias();
-       for (Propriedade propriedade: propriedades){
+        for (Propriedade propriedade: propriedades){
            var boleto = new BoletoCondominial(valorMulta, porcentagemMensalJuros, dataVencimento, taxaBase, contaAgua, propriedade, condominio);
            boleto.calcularTaxaFinal(qtd);
-           boleto.gerarPDF();
-       }
-
+           this.serviceGeradorBoletos.gerarBoleto(boleto);
+        }
     }
 }

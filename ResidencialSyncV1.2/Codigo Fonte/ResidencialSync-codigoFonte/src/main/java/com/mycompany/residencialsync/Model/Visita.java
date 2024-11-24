@@ -58,49 +58,6 @@ public class Visita {
         this.visitante = new Visitante(placaVeiculoVisitante, cpfVisitante);
     }
 
-
-    public String gerarQrCode(){
-        String qrCodeText = "CPF: " + visitante.getCpf() + "\nData Visita: " + dataEhora1 +
-                "\nData Expiração: " + dataEhora1.plusDays(1L);
-        String filePath = System.getProperty("user.home") + "/Downloads/" + visitante.getPlacaVeiculo() + "qrcode.png";
-        int qrCodeSize = 300;
-        int imageWidth = 300;
-        int imageHeight = 400;
-
-        try {
-
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeText, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
-            BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-
-            BufferedImage combinedImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = combinedImage.createGraphics();
-
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, imageWidth, imageHeight);
-            g.drawImage(qrCodeImage, 0, 0, null);
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("Arial", Font.PLAIN, 16));
-            String additionalText = "CPF: " + visitante.getCpf() + "\nData Visita: " + dataEhora1 +
-                    "\nExpira em: " + dataEhora1.plusDays(1L);
-
-            String[] lines = additionalText.split("\n");
-            int y = qrCodeSize + 20;
-            for (String line : lines) {
-                g.drawString(line, 10, y);
-                y += 20;
-            }
-
-            g.dispose();
-            File outputFile = new File(filePath);
-            ImageIO.write(combinedImage, "png", outputFile);
-            System.out.println("QR Code gerado com informações em: " + filePath);
-            return filePath;
-        } catch (WriterException | IOException e) {
-           throw new RuntimeException("Erro ao gerar QrCode!");
-        }
-    }
-
     public Visitante getVisitante() {
         return visitante;
     }

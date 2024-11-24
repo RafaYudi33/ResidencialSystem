@@ -67,7 +67,6 @@ public abstract class Propriedade {
                 reservas30dias.add(reserva);
             }
         }
-        System.out.println(reservas30dias.size());
         return reservas30dias.size();
     }
 
