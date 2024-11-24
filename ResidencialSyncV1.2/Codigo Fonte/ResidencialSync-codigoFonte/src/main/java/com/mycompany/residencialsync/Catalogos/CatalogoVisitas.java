@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.residencialsync.Catalogos;
-
 import com.mycompany.residencialsync.InterfacesJPA.InterfaceJpaVisita;
 import com.mycompany.residencialsync.Model.UnidadeResidencial;
 import com.mycompany.residencialsync.Model.Visita;
@@ -19,7 +18,6 @@ import java.util.List;
  *
  * @author rafay
  */
-
 
 @Component
 public class CatalogoVisitas {
