@@ -82,7 +82,7 @@ public class TelaReservasAreasDeLazer extends JFrame {
 
         JLabel lblArea = new JLabel("Área de Lazer:");
         JLabel lblPropriedade = new JLabel("Propriedade:");
-        JLabel lblCPF = new JLabel("CPF do Morador:");
+        JLabel lblCPF = new JLabel("CPF do Reservante:");
         JLabel lblDataHora = new JLabel("Data e Hora:");
         JLabel lblDuracao = new JLabel("Duração (horas):");
 

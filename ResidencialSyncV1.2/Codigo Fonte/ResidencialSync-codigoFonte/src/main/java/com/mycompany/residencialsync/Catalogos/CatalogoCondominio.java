@@ -25,10 +25,10 @@ public class CatalogoCondominio {
     }
     
     public void carregarCondominio(){
-        this.interfaceJpaCondominio.findById(1L).ifPresentOrElse(
+        this.interfaceJpaCondominio.findFirstCondominio().ifPresentOrElse(
                 condominio -> this.condominio = condominio,
                 () ->{
-                    throw new RuntimeException("Condominio não existe");
+                    throw new RuntimeException("Nenhum Condominio Cadastrado");
                 }
         );
     }
