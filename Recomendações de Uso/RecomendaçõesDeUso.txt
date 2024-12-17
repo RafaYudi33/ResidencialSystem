@@ -1,6 +1,0 @@
-Java v21
-Maven v3.9.5
-IDE: Intellij 
-Banco de dados: Mysql 
-
-Recomendação pra rodar: No mesmo diretório desse arquivo tem o "DadosQuePrecisamSerPreCadastrados.sql", que são os inserts do banco pra inserir alguns dados que devem ser pré cadastrados. Basta definir o user e pass no arquivo CodigoFont/.../Config/JpaConfig. O Jpa vai criar as tabelas na primeira vez que rodar mas não vai funcionar pelo fato de que não vai ter nenhum Condominio cadastrado, então basta executar os inserts do arquivo .sql e popular o banco. E então rodar novamente.
