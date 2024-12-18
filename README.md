@@ -1,3 +1,4 @@
+
 <h1 align="center" style="font-weight: bold;">ResidencialSync 🏠</h1>
 
 <div align="center">
@@ -21,6 +22,8 @@
   <b>Um sistema desktop para gerenciamento de condomínios residenciais.</b>
 </p>
 
+---
+
 <h2 id="started">🚀 Como Começar</h2>
 
 ### Pré-requisitos
@@ -29,34 +32,103 @@ Garanta que você tem instalado:
 
 - Java 17 ou superior
 - Maven para gerenciamento de dependências
+- MySQL para o banco de dados
 
-### Clonando
+### Clonando o Projeto
 
 Clone o repositório:
 
 ```bash
-git clone seu-projeto-url-no-github
+git clone https://github.com/RafaYudi33/ResidencialSystem.git
+cd ResidencialSystem
 ```
 
-### Banco de Dados
+### Configuração do Banco de Dados
 
-Antes de rodar o aplicativo, certifique-se de configurar o banco de dados necessário. Use o arquivo `application.properties.example` como referência para criar seu arquivo `application.properties` com a sua configuração.
+Antes de rodar o aplicativo, configure o banco de dados no arquivo **`application.properties`**:
 
-```yaml
-spring.datasource.url=jdbc:postgresql://localhost:5432/seu_nome_de_banco
-spring.datasource.username=nome_de_usuario_do_banco
-spring.datasource.password=senha_do_banco
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/condominio
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+spring.jpa.hibernate.ddl-auto=update
 ```
 
+### Executando a Aplicação
+
+1. Compile o projeto com Maven:
+   ```bash
+   mvn clean install
+   ```
+
+2. Execute a aplicação:
+   ```bash
+   java -jar target/ResidencialSync.jar
+   ```
+
+---
 
 <h2 id="features">📍 Funcionalidades</h2>
 
-- **Gerenciamento de Áreas de Lazer**: Agende e gerencie as áreas de lazer, evitando sobreposição de reservas.
-- **Validação de Moradores**: Certifique-se de que apenas moradores ou proprietários façam reservas, validando pelo CPF.
-- **Relatórios e Comprovantes**: Gere relatórios sobre as áreas disponíveis e produza comprovantes em PDF das reservas.
-- **Cobranças Condominiais**: Emita boletos de cobrança com juros e multas aplicáveis.
-- **Agendamento de Visitas**: Permita agendamentos de visitas com geração de QR code para controle de acesso.
-- **Relatórios por Placa de Veículo**: Produza relatórios detalhados dos moradores a partir das placas de veículos.
+> ### 🚀 **1. Gerenciamento de Áreas de Lazer**
+> - Agendamento de **áreas de lazer** por períodos de até **5 horas**.  
+> - Impede **sobreposição** de reservas no mesmo horário.  
+> - Valida se o agendamento é feito por **moradores ou proprietários** através do CPF.  
+> - **Gera comprovantes em PDF** contendo:  
+>   - Nome do responsável  
+>   - Local reservado  
+>   - Data e hora da reserva  
+
+---
+
+> ### 📋 **2. Relatórios de Disponibilidade**
+> - Gera **relatórios das áreas disponíveis** para agendamento em uma data e hora específica.
+
+---
+
+> ### 💵 **3. Emissão e Gestão de Boletos**
+> - Permite emitir **boletos de cobrança** das taxas condominiais para as propriedades, calculando:  
+>   - **Rateio da conta de água** entre unidades residenciais.  
+>   - Taxa base definida pelo condomínio.  
+>   - Taxa fixa de **R$ 10,00** por agendamento de área de lazer nos últimos **30 dias**.  
+> - **Download automático** de todos os boletos gerados no sistema.
+> - Calcula **multas** aplicáveis a boletos vencidos com base nas regras do condomínio.
+> - Exclui os terrenos do rateio de agua.
+
+---
+
+> ### 🏠 **5. Relatórios de Moradores**
+> - Gera relatórios detalhados dos moradores de **uma unidade residencial específica**, incluindo:  
+>   - Nome  
+>   - CPF  
+>   - RG  
+>   - Data de Nascimento  
+>   - Sexo  
+> - Permite gerar **relatórios a partir da placa de veículos** associados a moradores.
+
+---
+
+> ### 📅 **6. Agendamento de Visitas**
+> - Agendamento de visitas com geração de **QR Codes únicos** para:  
+>   - Controle de entrada e saída  
+>   - Validade de **1 dia** após a data agendada.  
+> - **Dados necessários:**  
+>   - CPF do visitante  
+>   - Placa do veículo  
+>   - Dia da visita e telefone de contato.  
+> - O QR Code é **salvo na máquina** e pode ser compartilhado com o visitante.
+
+---
+
+> ### 🔄 **7. Inicialização e Carregamento Completo de Dados**
+> - Durante a **inicialização do sistema**, todos os **dados essenciais** são carregados, incluindo:  
+>   - Dados do condomínio (nome, agência, convênio, endereço, CNPJ, etc.).  
+>   - Dados das unidades residenciais e terrenos.  
+>   - Dados dos moradores e proprietários.  
+>   - Dados das reservas e agendamentos existentes.  
+>   - Informações dos veículos e suas associações com os moradores.  
+
+---
 
 <h2 id="libraries">🔌 Bibliotecas Externas</h2>
 
@@ -64,4 +136,4 @@ Para aprimorar as funcionalidades e desempenho do sistema, as seguintes bibliote
 
 - **Stella-Boleto**: Utilizada para a geração de boletos bancários.
 - **Apache PDFBox**: Empregada para a criação e manipulação de documentos PDF, como comprovantes de reserva.
-- **ZXing ("Zebra Crossing")**: Usada para a geração de QR Codes que facilitam o acesso e controle de visitas.
+- **ZXing ("Zebra Crossing")**: Usada para a geração de QR Codes que facilitam o controle de visitas.
