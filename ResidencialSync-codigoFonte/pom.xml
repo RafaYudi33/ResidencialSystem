@@ -102,11 +102,6 @@
             <version>3.5.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -119,6 +114,14 @@
             <artifactId>flyway-mysql</artifactId>
             <version>10.0.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.lgooddatepicker</groupId>
+            <artifactId>LGoodDatePicker</artifactId>
+            <version>11.2.1</version>
+        </dependency>
+
+
     </dependencies>
 
 
