@@ -7,11 +7,12 @@ package com.mycompany.residencialsync.Catalogos;
 import com.mycompany.residencialsync.InterfacesJPA.InterfaceJpaPropriedades;
 import com.mycompany.residencialsync.Model.*;
 import com.mycompany.residencialsync.ServicosExternos.ServiceGeradorBoletos;
+import com.mycompany.residencialsync.ServicosExternos.awsServices.ServiceS3Uploader;
+import com.mycompany.residencialsync.ServicosExternos.awsServices.ServiceSqsSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +29,15 @@ public class CatalogoPropriedades {
     private List<Propriedade> propriedades;
     private final ServiceGeradorBoletos serviceGeradorBoletos;
     private final InterfaceJpaPropriedades interfaceJpaPropriedades;
+    private final ServiceS3Uploader serviceS3Uploader;
+    private final ServiceSqsSender serviceSqsSender;
 
     @Autowired
-    public CatalogoPropriedades(ServiceGeradorBoletos serviceGeradorBoletos, InterfaceJpaPropriedades interfaceJpaPropriedades){
+    public CatalogoPropriedades(ServiceGeradorBoletos serviceGeradorBoletos, InterfaceJpaPropriedades interfaceJpaPropriedades, ServiceS3Uploader serviceS3Uploader, ServiceSqsSender serviceSqsSender){
         this.serviceGeradorBoletos = serviceGeradorBoletos;
         this.interfaceJpaPropriedades = interfaceJpaPropriedades;
+        this.serviceS3Uploader = serviceS3Uploader;
+        this.serviceSqsSender = serviceSqsSender;
         this.propriedades = new ArrayList<>();
         carregarPropriedades();
     }
@@ -66,12 +71,15 @@ public class CatalogoPropriedades {
         this.propriedades.addAll(this.interfaceJpaPropriedades.findAll());
     }
 
-    public void gerarPdfBoletosTodasProps(double valorMulta, double porcentagemMensalJuros, LocalDateTime dataVencimento, double taxaBase, double contaAgua,Condominio condominio) {
+    public void gerarPdfBoletosTodasProps(double valorMulta, double porcentagemMensalJuros, LocalDateTime dataVencimento, double taxaBase, double contaAgua,Condominio condominio) throws Exception {
         var qtd = obterQtdResidencias();
         for (Propriedade propriedade: propriedades){
            var boleto = new BoletoCondominial(valorMulta, porcentagemMensalJuros, dataVencimento, taxaBase, contaAgua, propriedade, condominio);
            boleto.calcularTaxaFinal(qtd);
-           this.serviceGeradorBoletos.gerarBoleto(boleto);
+           String caminhoBoleto = this.serviceGeradorBoletos.gerarBoleto(boleto);
+           String s3filePath = this.serviceS3Uploader.uploadFile(caminhoBoleto, boleto);
+           this.serviceSqsSender.sendMessage(propriedade.getProprietario().getEmail(), "Boleto Condominial", s3filePath);
         }
     }
+
 }

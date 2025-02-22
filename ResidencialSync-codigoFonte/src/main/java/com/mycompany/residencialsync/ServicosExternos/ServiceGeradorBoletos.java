@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Service
 public class ServiceGeradorBoletos {
 
-    public void gerarBoleto(BoletoCondominial boletoCondominial) {
+    public String gerarBoleto(BoletoCondominial boletoCondominial) {
         var diaAtual = LocalDateTime.now().getDayOfMonth();
         var mesAtual = LocalDateTime.now().getMonthValue();
         var anoAtual = LocalDateTime.now().getYear();
@@ -72,8 +72,10 @@ public class ServiceGeradorBoletos {
                 .comValorMulta(BigDecimal.valueOf(boletoCondominial.getValorMulta()));
 
         GeradorDeBoleto gerador = new GeradorDeBoleto(boleto);
+        String caminho = montarCaminho(propriedade);
         byte[] bPDF = gerador.geraPDF();
-        salvarArquivo(bPDF, montarCaminho(propriedade));
+        salvarArquivo(bPDF, caminho);
+        return caminho;
     }
 
     private void salvarArquivo(byte[] bpdf, String caminhoArquivo) {
@@ -90,8 +92,9 @@ public class ServiceGeradorBoletos {
                 File.separator +
                 "Downloads" +
                 File.separator +
-                propriedade.getLogradouro()+
-                propriedade.getNumero()
+                propriedade.getProprietario().getCpf()+
+                "-" +
+                propriedade.getCep()
                 +"boleto.pdf";
     }
 

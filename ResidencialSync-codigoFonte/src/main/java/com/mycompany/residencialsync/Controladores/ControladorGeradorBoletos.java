@@ -34,7 +34,7 @@ public class ControladorGeradorBoletos {
         this.catalogoPropriedades = catalogoPropriedades;
     }
 
-    public void gerarPDFBoletos(double valotMulta, double porcentagemMensalJuros, LocalDateTime dataVencimento, double taxaBase, double contaAgua) throws IOException {
+    public void gerarPDFBoletos(double valotMulta, double porcentagemMensalJuros, LocalDateTime dataVencimento, double taxaBase, double contaAgua) throws Exception {
         this.catalogoPropriedades.gerarPdfBoletosTodasProps(valotMulta, porcentagemMensalJuros, dataVencimento, taxaBase, contaAgua, this.catalogoCondominios.recuperarCondominio());
     }
 

@@ -7,9 +7,9 @@ VALUES (1,1234,'Centro','12345-678','Cidade A','00.000.000/0001-91',12345,'1','1
 /*
 -- Query: SELECT * FROM condominio.proprietario
 */
-INSERT INTO `condominio`.`proprietario` (`id`,`cpf`,`nome`,`rg`,`telefone`) 
-VALUES (1,'111.111.111-11','Proprietário 1','RG1111','(11) 1111-1111'),
-       (2,'222.222.222-22','Proprietário 2','RG2222','(22) 2222-2222');
+INSERT INTO `condominio`.`proprietario` (`id`,`cpf`,`nome`,`rg`,`telefone`,`email`)
+VALUES (1,'111.111.111-11','Proprietário 1','RG1111','(11) 1111-1111', 'rafayudi2010@hotmail.com'),
+       (2,'222.222.222-22','Proprietário 2','RG2222','(22) 2222-2222', 'yudirafael33@gmail.com');
 
 /*
 -- Query: SELECT * FROM condominio.propriedade

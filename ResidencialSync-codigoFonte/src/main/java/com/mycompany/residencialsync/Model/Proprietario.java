@@ -24,6 +24,7 @@ public class Proprietario {
     private String nome;
     private String rg;
     private String telefone;
+    private String email;
 
     @OneToMany(mappedBy = "proprietario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Propriedade> propriedades;
@@ -31,11 +32,12 @@ public class Proprietario {
     public Proprietario() {
     }
 
-    public Proprietario(String cpf, String nome, String rg, String telefone, List<Propriedade> propriedades) {
+    public Proprietario(String cpf, String nome, String rg, String telefone, String email, List<Propriedade> propriedades) {
         this.cpf = cpf;
         this.nome = nome;
         this.rg = rg;
         this.telefone = telefone;
+        this.email = email;
         this.propriedades = propriedades;
     }
 
@@ -78,8 +80,13 @@ public class Proprietario {
     public void setPropriedades(List<Propriedade> propriedades) {
         this.propriedades = propriedades;
     }
-    
-    
-    
-    
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
