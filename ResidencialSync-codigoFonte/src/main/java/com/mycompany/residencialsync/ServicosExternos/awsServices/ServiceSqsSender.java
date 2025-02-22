@@ -17,6 +17,9 @@ public class ServiceSqsSender {
     private final SqsClient sqsClient;
     private Logger logger = LoggerFactory.getLogger(ServiceSqsSender.class);
 
+    @Value("${aws.services.ses.emailSender}")
+    private String sender;
+
     @Value("${aws.services.sqs.queue-url}")
     private String queueUrl;
 
@@ -30,7 +33,7 @@ public class ServiceSqsSender {
                 to,
                 subject,
                 body,
-                "yudirafael33@gmail.com"
+                sender
 
         );
 
