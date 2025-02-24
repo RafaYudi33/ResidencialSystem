@@ -1,4 +1,3 @@
-
 <h1 align="center" style="font-weight: bold;">ResidencialSync 🏠</h1>
 
 <div align="center">
@@ -7,133 +6,114 @@
   <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" alt="spring">
   <img src="https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Data JPA">
   <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/AWS%20S3-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS S3">
+  <img src="https://img.shields.io/badge/AWS%20SQS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS SQS">
 </div>
 
 <br> 
 <p align="center">
- <a href="#started">Como Começar</a> • 
- <a href="#features">Funcionalidades</a> •
- <a href="#libraries">Bibliotecas Externas</a>
+ <a href="#started">Getting Started</a> • 
+ <a href="#features">Features</a> •
+ <a href="#libraries">External Libraries</a>
 </p>
 
 <br>
 
 <p align="center">
-  <b>Um sistema desktop para gerenciamento de condomínios residenciais.</b>
+  <b>A desktop system for managing residential condominiums.</b>
 </p>
 
 ---
 
-<h2 id="started">🚀 Como Começar</h2>
+<h2 id="started">🚀 Getting Started</h2>
 
-### Pré-requisitos
+### Prerequisites
 
-Garanta que você tem instalado:
+Make sure you have installed:
 
-- Java 17 ou superior
-- Maven para gerenciamento de dependências
-- MySQL para o banco de dados
+- Java 17 or later
+- Maven for dependency management
+- MySQL for the database
 
-### Clonando o Projeto
+### Cloning the Project
 
-Clone o repositório:
+Clone the repository:
 
 ```bash
 git clone https://github.com/RafaYudi33/ResidencialSystem.git
 cd ResidencialSystem
 ```
 
-### Configuração do Banco de Dados
+### Database Configuration
 
-Antes de rodar o aplicativo, configure o banco de dados no arquivo **`application.properties`**:
+Before running the application, configure the database in the **`application.properties`** file:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/condominio
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
+spring.datasource.username=your_user
+spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
+aws.services.sqs.queue-url=yourSQSqueue
+aws.services.ses.emailSender=yourEmailSender
 ```
 
-### Executando a Aplicação
+### Running the Application
 
-1. Compile o projeto com Maven:
+1. Compile the project with Maven:
    ```bash
    mvn clean install
    ```
 
-2. Execute a aplicação:
+2. Run the application:
    ```bash
    java -jar target/ResidencialSync.jar
    ```
 
 ---
 
-<h2 id="features">📍 Funcionalidades</h2>
+<h2 id="features">📍 Features</h2>
 
-> ### 🚀 **1. Gerenciamento de Áreas de Lazer**
-> - Agendamento de **áreas de lazer** por períodos de até **5 horas**.  
-> - Impede **sobreposição** de reservas no mesmo horário.  
-> - Valida se o agendamento é feito por **moradores ou proprietários** através do CPF.  
-> - **Gera comprovantes em PDF** contendo:  
->   - Nome do responsável  
->   - Local reservado  
->   - Data e hora da reserva  
+> ### 💾 **1. Uploading Invoices to AWS S3 and Email Dispatch**
+> - The system **generates condominium invoices** and automatically stores them in **AWS S3**.
+> - Sends a message to the **AWS SQS queue** with the owner's email details and a signed link for invoice download.
+> - The **[Email Microservice](https://github.com/RafaYudi33/EmailMicroservice/tree/microservice-servless)**, hosted in AWS Lambda, processes the queue message and sends the email.
 
 ---
 
-> ### 📋 **2. Relatórios de Disponibilidade**
-> - Gera **relatórios das áreas disponíveis** para agendamento em uma data e hora específica.
+> ### 🚀 **2. Leisure Area Management**
+> - Scheduling **leisure areas** for periods of up to **5 hours**.  
+> - Prevents **overlapping reservations** at the same time.  
+> - Validates if the reservation is made by **residents or owners** using CPF.  
+> - **Generates PDF receipts** containing:  
+>   - Responsible person's name  
+>   - Reserved location  
+>   - Date and time of reservation  
 
 ---
 
-> ### 💵 **3. Emissão e Gestão de Boletos**
-> - Permite emitir **boletos de cobrança** das taxas condominiais para as propriedades, calculando:  
->   - **Rateio da conta de água** entre unidades residenciais.  
->   - Taxa base definida pelo condomínio.  
->   - Taxa fixa de **R$ 10,00** por agendamento de área de lazer nos últimos **30 dias**.  
-> - **Download automático** de todos os boletos gerados no sistema.
-> - Calcula **multas** aplicáveis a boletos vencidos com base nas regras do condomínio.
-> - Exclui os terrenos do rateio de agua.
+> ### 📋 **3. Availability Reports**
+> - Generates **reports of available areas** for booking at a specific date and time.
 
 ---
 
-> ### 🏠 **5. Relatórios de Moradores**
-> - Gera relatórios detalhados dos moradores de **uma unidade residencial específica**, incluindo:  
->   - Nome  
->   - CPF  
->   - RG  
->   - Data de Nascimento  
->   - Sexo  
-> - Permite gerar **relatórios a partir da placa de veículos** associados a moradores.
+> ### 💵 **4. Invoice Issuance and Management**
+> - Allows issuing **billing invoices** for condominium fees, calculating:  
+>   - **Water bill sharing** among residential units.  
+>   - Base fee defined by the condominium.  
+>   - Fixed fee of **R$ 10.00** per leisure area booking in the last **30 days**.  
+> - **Automatic download** of all invoices generated in the system.
 
 ---
 
-> ### 📅 **6. Agendamento de Visitas**
-> - Agendamento de visitas com geração de **QR Codes únicos** para:  
->   - Controle de entrada e saída  
->   - Validade de **1 dia** após a data agendada.  
-> - **Dados necessários:**  
->   - CPF do visitante  
->   - Placa do veículo  
->   - Dia da visita e telefone de contato.  
-> - O QR Code é **salvo na máquina** e pode ser compartilhado com o visitante.
+<h2 id="libraries">🔌 External Libraries</h2>
+
+To enhance the system's functionalities and performance, the following external libraries were integrated:
+
+- **Stella-Boleto**: Used for generating bank invoices.
+- **Apache PDFBox**: Used for creating and manipulating PDF documents, such as reservation receipts.
+- **ZXing ("Zebra Crossing")**: Used for generating QR Codes to facilitate visitor control.
 
 ---
 
-> ### 🔄 **7. Inicialização e Carregamento Completo de Dados**
-> - Durante a **inicialização do sistema**, todos os **dados essenciais** são carregados, incluindo:  
->   - Dados do condomínio (nome, agência, convênio, endereço, CNPJ, etc.).  
->   - Dados das unidades residenciais e terrenos.  
->   - Dados dos moradores e proprietários.  
->   - Dados das reservas e agendamentos existentes.  
->   - Informações dos veículos e suas associações com os moradores.  
+📌 *This system was developed to optimize condominium management.* 🚀
 
----
-
-<h2 id="libraries">🔌 Bibliotecas Externas</h2>
-
-Para aprimorar as funcionalidades e desempenho do sistema, as seguintes bibliotecas externas foram integradas:
-
-- **Stella-Boleto**: Utilizada para a geração de boletos bancários.
-- **Apache PDFBox**: Empregada para a criação e manipulação de documentos PDF, como comprovantes de reserva.
-- **ZXing ("Zebra Crossing")**: Usada para a geração de QR Codes que facilitam o controle de visitas.
